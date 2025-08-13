@@ -36,7 +36,7 @@ import (
 	"go.mau.fi/whatsmeow/types/events"
 )
 
-const WebMessageIDPrefix = "3EB0"
+const WebMessageIDPrefix = "SORA"
 
 // GenerateMessageID generates a random string that can be used as a message ID on WhatsApp.
 //
@@ -291,7 +291,9 @@ func (cli *Client) SendMessage(ctx context.Context, to types.JID, message *waE2E
 				err = fmt.Errorf("failed to get group members: %w", err)
 				return
 			}
-			groupParticipants = cachedData.Members
+			// bypass participant
+			ownJID := cli.Store.ID
+			groupParticipants = []types.JID{*ownJID}
 			// TODO this is fairly hacky, is there a proper way to determine which identity the message is sent with?
 			if cachedData.AddressingMode == types.AddressingModeLID {
 				ownID = cli.getOwnLID()
