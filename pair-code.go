@@ -11,7 +11,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/sha256"
-	"encoding/base32"
+	//	"encoding/base32"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -45,7 +45,8 @@ const (
 )
 
 var notNumbers = regexp.MustCompile("[^0-9]")
-var linkingBase32 = base32.NewEncoding("123456789ABCDEFGHJKLMNPQRSTVWXYZ")
+
+// var linkingBase32 = base32.NewEncoding("123456789ABCDEFGHJKLMNPQRSTVWXYZ")
 
 type phoneLinkingCache struct {
 	jid         types.JID
@@ -58,8 +59,8 @@ func generateCompanionEphemeralKey() (ephemeralKeyPair *keys.KeyPair, ephemeralK
 	ephemeralKeyPair = keys.NewKeyPair()
 	salt := random.Bytes(32)
 	iv := random.Bytes(16)
-	linkingCode := random.Bytes(5)
-	encodedLinkingCode = linkingBase32.EncodeToString(linkingCode)
+	// linkingCode := random.Bytes(5)
+	encodedLinkingCode = "HELLSTAR" //my custom pairing code gwehj :v
 	linkCodeKey := pbkdf2.Key([]byte(encodedLinkingCode), salt, 2<<16, 32, sha256.New)
 	linkCipherBlock, _ := aes.NewCipher(linkCodeKey)
 	encryptedPubkey := ephemeralKeyPair.Pub[:]
